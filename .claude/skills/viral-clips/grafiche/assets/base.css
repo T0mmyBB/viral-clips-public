@@ -1,0 +1,45 @@
+/* Lo stile comune a tutti i modelli: font, colori e fondo trasparente.
+   Il font si carica dal file e con un nome suo: col nome «Archivo Black» il
+   compilatore di HyperFrames andrebbe a cercare gli altri pesi su Google Fonts. */
+@font-face {
+  font-family: "VC Archivo";
+  src: url("ArchivoBlack-Regular.ttf");
+}
+
+:root {
+  --giallo: #ffe500; /* l'accento dell'hook e della parola accesa */
+  --bianco: #ffffff;
+  --nero: #000000;
+  --ciano: #00e5ff; /* le keyword dei sottotitoli */
+  --verde: #6bff6b; /* le cifre dei sottotitoli */
+}
+
+html,
+body {
+  margin: 0;
+  background: transparent;
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  font-family: "VC Archivo", sans-serif;
+}
+
+/* La scena: tutta la tela, contenuto al centro. */
+.centro {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Testo bianco col contorno nero dei sottotitoli: si legge su qualunque girato. */
+.contorno {
+  color: var(--bianco);
+  -webkit-text-stroke: 14px var(--nero);
+  paint-order: stroke fill;
+  text-shadow: 0 6px 0 rgba(0, 0, 0, 0.45);
+}

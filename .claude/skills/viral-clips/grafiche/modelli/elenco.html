@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- Da due a tre voci, una al secondo: un numero su un quadrato giallo e la voce
+     col contorno dei sottotitoli. Dati: {voci, size}. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      #blocco {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+      }
+      .voce {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        white-space: nowrap;
+      }
+      .n {
+        flex: none;
+        width: 1.25em;
+        height: 1.25em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--giallo);
+        color: var(--nero);
+        box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+        transform: rotate(-4deg);
+      }
+      .t {
+        line-height: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="blocco"></div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      const blocco = document.getElementById("blocco");
+      blocco.style.fontSize = P.size + "px";
+      P.voci.forEach((v, i) => {
+        const r = document.createElement("div");
+        r.className = "voce";
+        r.innerHTML = '<div class="n"></div><div class="t contorno"></div>';
+        r.querySelector(".n").textContent = String(i + 1);
+        r.querySelector(".t").textContent = v;
+        blocco.appendChild(r);
+      });
+
+      const tl = gsap.timeline({ paused: true });
+      blocco.querySelectorAll(".voce").forEach((r, i) => {
+        const t0 = 0.15 + 1.0 * i;
+        tl.fromTo(r.querySelector(".n"),
+          { scale: 0, rotation: -40 },
+          { scale: 1, rotation: -4, duration: 0.3, ease: "back.out(1.7)" }, t0);
+        tl.fromTo(r.querySelector(".t"),
+          { opacity: 0, x: -30, filter: "blur(8px)" },
+          { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.25, ease: "power4.out" }, t0 + 0.08);
+      });
+      tl.to("#blocco", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

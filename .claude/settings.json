@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(.venv/Scripts/python.exe .claude/skills/viral-clips/scripts/:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File .claude/skills/viral-clips/scripts/setup.ps1:*)"
+    ]
+  }
+}

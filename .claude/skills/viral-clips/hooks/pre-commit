@@ -1,0 +1,42 @@
+#!/bin/sh
+# Avvisa se il commit tocca la pipeline senza toccare PROGRESS.md.
+#
+# **Non blocca, e non deve.** Un controllore che impedisce di committare viene
+# aggirato con --no-verify entro la settimana, e da quel momento non dice piu
+# niente. Questo serve a farsi vedere nel momento esatto in cui te ne stai
+# dimenticando, che e l'unico momento in cui l'avviso e utile.
+#
+# Complementare a check_docs.py: quello verifica che i documenti descrivano il
+# codice vero, questo ricorda che i documenti esistono. Il primo non puo
+# accorgersi di una misura nuova che nessuno ha scritto da nessuna parte.
+#
+# Si installa da solo con setup.ps1, oppure a mano:
+#   cp .claude/skills/viral-clips/hooks/pre-commit .git/hooks/pre-commit
+
+set -u
+
+staged=$(git diff --cached --name-only)
+
+tocca_pipeline=$(printf '%s\n' "$staged" | grep -c '^\.claude/skills/viral-clips/scripts/' || true)
+tocca_progress=$(printf '%s\n' "$staged" | grep -c '^PROGRESS\.md$' || true)
+
+if [ "$tocca_pipeline" -gt 0 ] && [ "$tocca_progress" -eq 0 ]; then
+    echo ""
+    echo "  Questo commit tocca $tocca_pipeline file della pipeline, ma non PROGRESS.md."
+    echo ""
+    echo "  PROGRESS.md e l'unica fonte per stato e numeri misurati: se hai cambiato"
+    echo "  cosa fa uno script, o hai misurato qualcosa, li va scritto. Se invece e"
+    echo "  una modifica che non cambia ne lo stato ne i numeri, va benissimo cosi."
+    echo ""
+fi
+
+# La coerenza vera la controlla check_docs.py. Anche questo solo come avviso:
+# un commit di lavoro in corso puo legittimamente essere disallineato.
+if [ -x .venv/Scripts/python.exe ]; then
+    .venv/Scripts/python.exe .claude/skills/viral-clips/scripts/check_docs.py --quiet || {
+        echo "  (check_docs.py ha trovato dei disallineamenti — vedi sopra)"
+        echo ""
+    }
+fi
+
+exit 0

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="it" data-tema="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pannello di controllo — viral-clips</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+
+<div class="app">
+
+<!-- La barra laterale segue il flusso del lavoro, dall'alto in basso: cosa fare
+     oggi, cosa scegliere, cosa produrre, cosa esce, come va, e la domanda libera.
+     Ogni voce e' un indirizzo (#oggi, #campagne...): avanti, indietro e un link
+     mandato a se stessi funzionano come in qualunque pagina. -->
+<aside class="barra" aria-label="Sezioni del pannello">
+  <div class="marchio">
+    <span class="punto" aria-hidden="true"></span>
+    <div>
+      <b>viral-clips</b>
+      <span>pannello di controllo</span>
+    </div>
+  </div>
+
+  <nav id="navigazione">
+    <a class="voce" href="#oggi" data-sezione="oggi">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+      <span>Oggi</span><em class="contatore" id="conta-oggi" hidden></em>
+    </a>
+    <a class="voce" href="#campagne" data-sezione="campagne">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+      <span>Campagne</span><em class="contatore tenue" id="conta-campagne" hidden></em>
+    </a>
+    <a class="voce" href="#produzione" data-sezione="produzione">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="m17 10 4-2.5v9L17 14"/></svg>
+      <span>Produzione</span><em class="contatore tenue" id="conta-produzione" hidden></em>
+    </a>
+    <a class="voce" href="#pubblicazione" data-sezione="pubblicazione">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
+      <span>Pubblicazione</span><em class="contatore" id="conta-pubblicazione" hidden></em>
+    </a>
+    <a class="voce" href="#numeri" data-sezione="numeri">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m6 7H2"/></svg>
+      <span>Numeri</span>
+    </a>
+    <a class="voce" href="#chiedi" data-sezione="chiedi">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>
+      <span>Chiedi</span>
+    </a>
+  </nav>
+
+  <div class="piede-barra">
+    <button id="btn-social" class="btn primario pieno" data-azione="aggiorna" data-cosa="social"
+            title="Views, analitiche per post e Whop di tutti gli account: circa 20 minuti">Aggiorna social</button>
+    <button id="btn-radar" class="btn pieno" data-azione="aggiorna" data-cosa="radar"
+            title="Il catalogo delle campagne e le loro sorgenti">Aggiorna radar</button>
+    <div id="stato-giro" class="stato-giro" aria-live="polite"></div>
+    <dl id="freschezza" class="freschezza"></dl>
+    <button class="btn fantasma pieno" data-azione="tema" id="btn-tema"
+            title="Chiaro, scuro, o come Windows">Tema: automatico</button>
+  </div>
+</aside>
+
+<main id="contenuto" tabindex="-1">
+
+<!-- Il guasto si legge qui, sopra tutte le sezioni: un errore che si vede solo
+     aprendo la sezione giusta e' un errore che non si vede. Resta finche' non lo
+     si chiude o finche' un giro nuovo non riesce. -->
+<div id="errore-giro" class="riquadro-errore" role="alert" hidden>
+  <button id="chiudi-errore" class="chiudi" data-azione="chiudi-errore" aria-label="Nascondi l'errore">&times;</button>
+  <b id="errore-titolo"></b>
+  <pre id="errore-testo"></pre>
+</div>
+
+<section id="sez-oggi" class="sezione" data-sezione="oggi" aria-labelledby="tit-oggi">
+  <header class="testata">
+    <h1 id="tit-oggi">Oggi</h1>
+    <p class="sottotitolo" id="oggi-data"></p>
+  </header>
+  <div id="oggi-corpo"></div>
+</section>
+
+<section id="sez-campagne" class="sezione" data-sezione="campagne" aria-labelledby="tit-campagne" hidden>
+  <header class="testata">
+    <h1 id="tit-campagne">Campagne</h1>
+    <p class="sottotitolo">Cosa lavorare: il catalogo per nicchia, con i soldi, la soglia di pagamento e la sorgente già risolta.</p>
+  </header>
+  <div id="campagne-corpo"></div>
+</section>
+
+<section id="sez-produzione" class="sezione" data-sezione="produzione" aria-labelledby="tit-produzione" hidden>
+  <header class="testata">
+    <h1 id="tit-produzione">Produzione</h1>
+    <p class="sottotitolo">Dalla campagna scelta alle clip pronte: sorgente, preparazione, scelta, render, calendario.</p>
+  </header>
+  <div id="produzione-corpo"></div>
+</section>
+
+<section id="sez-pubblicazione" class="sezione" data-sezione="pubblicazione" aria-labelledby="tit-pubblicazione" hidden>
+  <header class="testata">
+    <h1 id="tit-pubblicazione">Pubblicazione</h1>
+    <p class="sottotitolo">Cosa esce e quando, se è registrato su Whop, e il ritmo di ogni account.</p>
+  </header>
+  <div id="pubblicazione-corpo"></div>
+</section>
+
+<section id="sez-numeri" class="sezione" data-sezione="numeri" aria-labelledby="tit-numeri" hidden>
+  <header class="testata">
+    <h1 id="tit-numeri">Numeri</h1>
+    <p class="sottotitolo">Views per piattaforma e per account, e cosa dice Whop degli invii: quello che misura il cancello.</p>
+  </header>
+  <div id="numeri-corpo"></div>
+</section>
+
+<section id="sez-chiedi" class="sezione" data-sezione="chiedi" aria-labelledby="tit-chiedi" hidden>
+  <header class="testata">
+    <h1 id="tit-chiedi">Chiedi</h1>
+    <p class="sottotitolo">Quello che nessun pulsante fa: «la didascalia della clip 3 è troppo lunga, riscrivila»,
+      «perché la 05 non è uscita?». Parte Claude sul progetto, come per i pulsanti: <b>può modificare
+      i file e lanciare comandi</b>. Non pubblica: quello lo fa solo il calendario.</p>
+  </header>
+  <div class="scheda chat">
+    <div id="conversazione" aria-live="polite"></div>
+    <form id="modulo-chiedi">
+      <label for="domanda" class="nascosto">La tua richiesta</label>
+      <textarea id="domanda" rows="3" placeholder="Scrivi qui, poi Ctrl+Invio"></textarea>
+      <div class="riga-comandi">
+        <button type="submit" id="btn-chiedi" class="btn primario">Chiedi</button>
+        <button type="button" id="btn-dimentica" class="btn" data-azione="dimentica">Ricomincia il filo</button>
+        <span class="fine" id="nota-chiedi"></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+</main>
+</div>
+
+<div id="finestra-clip" class="finestra" hidden>
+  <div class="finestra-fondo" data-azione="chiudi-clip"></div>
+  <div class="finestra-corpo" role="dialog" aria-modal="true" aria-label="Clip"></div>
+</div>
+
+<div id="avvisi-toast" class="toast-contenitore" aria-live="polite"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

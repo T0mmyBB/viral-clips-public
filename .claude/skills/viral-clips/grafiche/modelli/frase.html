@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- La frase ad effetto, parola per parola: bianca col contorno dei sottotitoli,
+     una parola in giallo con la sottolineatura che si stende sotto.
+     Dati: {righe: [[{t, a}]], size}. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      #blocco {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .riga {
+        display: flex;
+        gap: 0.28em;
+        line-height: 1.05;
+        white-space: nowrap;
+      }
+      .p {
+        position: relative;
+        display: inline-block;
+      }
+      .p.a {
+        color: var(--giallo);
+      }
+      .sotto {
+        position: absolute;
+        left: -4px;
+        right: -4px;
+        bottom: -0.06em;
+        height: 0.14em;
+        background: var(--giallo);
+        box-shadow: 0 0 0 5px var(--nero);
+        transform-origin: 0% 50%;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="blocco" class="contorno"></div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      const blocco = document.getElementById("blocco");
+      blocco.style.fontSize = P.size + "px";
+      const parole = [];
+      P.righe.forEach((r) => {
+        const riga = document.createElement("div");
+        riga.className = "riga";
+        r.forEach((w) => {
+          const s = document.createElement("span");
+          s.className = "p" + (w.a ? " a" : "");
+          s.textContent = w.t;
+          if (w.a) {
+            const u = document.createElement("i");
+            u.className = "sotto";
+            s.appendChild(u);
+          }
+          riga.appendChild(s);
+          parole.push(s);
+        });
+        blocco.appendChild(riga);
+      });
+
+      const tl = gsap.timeline({ paused: true });
+      // Le parole entrano a 90 ms l'una dall'altra, sfocate, senza scivolare.
+      parole.forEach((s, i) => {
+        tl.fromTo(s,
+          { opacity: 0, scale: 1.25, filter: "blur(8px)" },
+          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" },
+          0.09 * i);
+      });
+      const fine = 0.09 * (parole.length - 1) + 0.16;
+      const u = blocco.querySelector(".sotto");
+      if (u) tl.fromTo(u, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, fine);
+      tl.to("#blocco", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

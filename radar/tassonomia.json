@@ -1,0 +1,109 @@
+{
+ "_leggimi": "Le nicchie non sono argomenti: sono identita' di pagina. Due campagne stanno nella stessa nicchia se lo stesso account puo' postarle entrambe senza sembrare un account che parla di due cose diverse. E' questo il criterio che serve al multi-account, e non coincide con la classificazione per forma del sorgente (`forma` in assegnazioni.json), che dice invece se la pipeline puo' lavorarle.",
+ "scritta_il": "2026-09-02",
+ "assi": {
+  "nicchia": "l'identita' della pagina che pubblica: cosa deve sembrare l'account a chi lo apre",
+  "sottonicchia": "il taglio dentro la nicchia; due sottonicchie della stessa nicchia convivono sulla stessa pagina, due nicchie diverse no",
+  "forma": "da cosa si taglia: parlato_lungo, stream_commentato, evento_reazione (lavorabili) | asset_fornito, musica_sound, slideshow, ugc_da_filmare, gameplay_muto, repost, ignoto (non lavorabili)",
+  "lingua": "lingua del parlato nel sorgente. La pipeline trascrive italiano e inglese; le altre sono marcate `lingua` e non `no`, perche' e' un limite di configurazione, non di forma",
+  "lavorabile": "si | lingua | no"
+ },
+ "nicchie": [
+  {
+   "nome": "business",
+   "definizione": "Imprenditoria, fondatori, vendita, coaching e marketing. E' la nicchia con piu' campagne di parlato lungo del catalogo, perche' il formato podcast e' il suo modo naturale di esistere.",
+   "pagina": "Pagina di clip di business: episodi di podcast, interviste a fondatori, consigli di vendita. Regge sottonicchie diverse (AI, immobiliare, carriera) purche' il registro resti quello.",
+   "sottonicchie": ["podcast-founder", "coaching-personal-brand", "coaching-vendite", "coaching-carriera", "coaching-speaker", "ai-marketing", "ai-automazione", "saas-founder", "immobiliare", "fiscale-offshore", "notizie-ecommerce", "keynote-innovazione", "business-musulmano", "formazione-professionale", "vendite-porta-a-porta", "motivazionale", "community", "business-hispano", "business-francofono", "business-vietnamita"]
+  },
+  {
+   "nome": "finanza",
+   "definizione": "Trading, prop firm, crypto, credito e finanza personale. Il pubblico e' vicino a quello di business ma la promessa e' diversa: li' si costruisce un'attivita', qui si gestiscono soldi.",
+   "pagina": "Pagina di finanza e mercati: grafici, storie di trader, spiegazioni. Le campagne prop firm e crypto convivono; il credito e la finanza personale sono un tono piu' rassicurante ma stanno insieme.",
+   "sottonicchie": ["prop-trading", "trading-education", "trading-ai", "crypto-trading", "credito-finanza-personale", "finanza-personale", "mercati-previsione"]
+  },
+  {
+   "nome": "gaming",
+   "definizione": "Videogiochi in tutte le forme. Va tenuta divisa in due mondi che non si mescolano: lo streamer che commenta (lavorabile) e il girato di gioco fornito dal publisher (muto, non lavorabile).",
+   "pagina": "Pagina di clip di uno streamer, o pagina di gaming generalista. Nel primo caso l'identita' e' la persona, nel secondo il gioco.",
+   "sottonicchie": ["streamer-clipping", "gameplay-publisher", "guide-fortnite", "mappe-fortnite", "roblox", "gioco-mobile", "gioco-crypto", "gioco-ai"]
+  },
+  {
+   "nome": "musica",
+   "definizione": "La nicchia piu' numerosa del catalogo e quella che serve meno: quasi tutto e' 'usa questo audio sopra un video tuo'. Il montaggio e' sincronizzato sul beat, non sul parlato, e la pipeline non sa farlo.",
+   "pagina": "Pagina di edit musicali o fanpage di un artista. Nessun rapporto con le altre nicchie: non condivide pubblico ne' formato.",
+   "sottonicchie": ["sound-campagna", "artista-clipping", "video-musicale", "performance-live", "dj-set-live"]
+  },
+  {
+   "nome": "intrattenimento",
+   "definizione": "Podcast di celebrita', creator, comedy, reality e documentari. Dove c'e' un episodio lungo la pipeline lavora; dove c'e' una clip gia' pronta no.",
+   "pagina": "Pagina di clip di intrattenimento: gossip, momenti di podcast, reazioni. Tollera piu' fonti diverse di qualunque altra nicchia.",
+   "sottonicchie": ["podcast-celebrity", "podcast-generico", "podcast-tedesco", "creator-personality", "comedy", "reality-show", "documentario", "film-tv", "drama-verticale", "anime-drama", "meme-repost", "live-tiktok"]
+  },
+  {
+   "nome": "tech-ai-app",
+   "definizione": "Strumenti AI, app di consumo, SaaS e le campagne della piattaforma stessa. Quasi sempre chiedono di **filmarsi** o di ripostare un asset: e' la nicchia con piu' campagne e meno lavoro possibile per noi.",
+   "pagina": "Pagina di AI e tool, oppure pagina UGC con un volto. La seconda non la possiamo fare: non abbiamo nessuno davanti alla camera.",
+   "sottonicchie": ["strumenti-ai", "app-consumer", "piattaforma-clipping", "saas-business", "crypto-wallet", "gioco-app", "ai-persona", "ai-storytelling", "tutorial-tech", "e-commerce-gaming"]
+  },
+  {
+   "nome": "salute-benessere",
+   "definizione": "Longevita', fitness, nutrizione, estetica e salute mentale. Si divide netto: i podcast di salute sono lavorabili, le app di dieta vogliono slideshow.",
+   "pagina": "Pagina di salute e longevita' (podcast scientifici) o pagina palestra/looksmaxxing. Sono due pubblici diversi: meglio non mescolarli.",
+   "sottonicchie": ["podcast-longevita", "salute-funzionale", "salute-alternativa", "longevita-peptidi", "looksmaxxing", "estetica-trapianto", "estetica-abbronzatura", "fitness-calisthenics", "fitness-trasformazione", "app-fitness", "app-nutrizione", "nutrizione-brand", "psicologia-relazioni", "relazioni-mentale", "crescita-personale"]
+  },
+  {
+   "nome": "collezionismo",
+   "definizione": "Carte collezionabili, blind box, sneaker, reselling. Le aperture di buste sono l'unica forma 'evento con reazione' del catalogo che regge da sola: c'e' parlato, c'e' una sorpresa, e il momento e' autoconclusivo per costruzione.",
+   "pagina": "Pagina che vive nella cultura delle carte (pulls, breaks, rips) — piu' brief lo chiedono esplicitamente. I blind box sono un pubblico adiacente ma un formato diverso (unboxing, ASMR).",
+   "sottonicchie": ["carte-collezionabili", "blind-box", "sneaker-marketplace", "maglie-sportive", "reselling-vintage"]
+  },
+  {
+   "nome": "sport-fitness",
+   "definizione": "Sport praticato e guardato: MMA, grappling, calcio, baseball, podcast sportivi.",
+   "pagina": "Pagina di uno sport, o pagina di clip di un podcast sportivo. L'MMA e il grappling stanno insieme; il calcio no.",
+   "sottonicchie": ["mma", "grappling-bjj", "podcast-sportivo", "calcio-vlog", "basket-creator", "baseball", "sport-alternativi"]
+  },
+  {
+   "nome": "notizie-politica",
+   "definizione": "Attualita', giornalismo, advocacy e talk show politici. Forma quasi sempre buona (sono ore di parlato), ma il pubblico e' geograficamente vincolato e i brief chiedono spesso il 40% Tier-1.",
+   "pagina": "Pagina di notizie e commento politico. Rischio reputazionale piu' alto della media: quello che si pubblica qui resta attaccato all'identita' dell'account.",
+   "sottonicchie": ["podcast-politico", "talk-show-politico", "giornalismo-investigativo", "advocacy", "advocacy-legale", "legale-consumatori", "eventi-politici", "filosofia-religione"]
+  },
+  {
+   "nome": "brand-prodotto",
+   "definizione": "Marchi di prodotti fisici: cibo, casa, elettrodomestici, integratori, viaggi. Vogliono quasi sempre UGC girato o slideshow.",
+   "pagina": "Pagina UGC o pagina prodotto. Fuori portata senza qualcuno davanti alla camera, salvo le poche campagne che forniscono girato lungo.",
+   "sottonicchie": ["integratori-benessere", "food-cucina", "casa-arredo", "casa-edilizia", "elettrodomestici", "beauty-moda", "dating-app", "viaggi-turismo", "giveaway-promo", "disabilita-lifestyle", "ugc-repost"]
+  },
+  {
+   "nome": "azzardo-scommesse",
+   "definizione": "Casino, poker, scommesse sportive, giochi a soldi veri. Alcune campagne hanno la forma giusta (stream di blackjack, mani di poker da show lunghi) ma la nicchia e' esclusa a monte: eta' vietata, restrizioni delle piattaforme e rischio di chiusura dell'account.",
+   "pagina": "Pagina di gambling. Da non aprire: un ban qui non colpisce una campagna, colpisce l'identita' Google che regge tutti i profili.",
+   "sottonicchie": ["casino-brand", "casino-streaming", "casino-streamer", "streamer-casino", "poker", "scommesse-sportive", "app-scommesse-sociali", "gaming-soldi-reali", "tipster-telegram"]
+  },
+  {
+   "nome": "auto-motori",
+   "definizione": "Auto, moto, mobilita' elettrica e accessori.",
+   "pagina": "Pagina di auto e motori. Pubblico largo, ma quasi nessuna campagna qui offre un sorgente lungo.",
+   "sottonicchie": ["auto-luxury", "auto-edit", "app-auto", "moto", "mobilita-elettrica", "accessori-auto"]
+  },
+  {
+   "nome": "fede",
+   "definizione": "App cristiane e islamiche, musica religiosa. Le app forniscono template pronti: si incolla una clip dentro, non si sceglie niente.",
+   "pagina": "Pagina di fede. Pubblico fedele e costante, ma il lavoro editoriale qui non serve a nessuno.",
+   "sottonicchie": ["cristiano-app", "islam-app", "musica-cristiana"]
+  },
+  {
+   "nome": "educazione-lingue",
+   "definizione": "App di studio e di apprendimento linguistico. Tutte a slideshow.",
+   "pagina": "Pagina di studio e produttivita'.",
+   "sottonicchie": ["app-lingue", "app-studio"]
+  },
+  {
+   "nome": "adulti-grey",
+   "definizione": "Piattaforme NSFW, strumenti per agenzie OnlyFans, reti di account che si taggano a vicenda. Escluse a prescindere dalla forma.",
+   "pagina": "Nessuna. Anche le campagne 'platform-compliant' chiedono un'identita' che non vogliamo attaccare a un account che ne regge altri.",
+   "sottonicchie": ["nsfw-piattaforma", "nsfw-strumenti", "modelle-telegram"]
+  }
+ ]
+}

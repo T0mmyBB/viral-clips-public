@@ -1,0 +1,82 @@
+<!doctype html>
+<!-- Da quanto a quanto: il primo valore entra, viene barrato in rosso e scende,
+     il secondo atterra sulla fascia gialla. Dati: {prima, dopo, size_prima, size_dopo}. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      #blocco {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 34px;
+      }
+      #prima {
+        position: relative;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      #barra {
+        position: absolute;
+        left: -16px;
+        right: -16px;
+        top: 50%;
+        height: 12px;
+        margin-top: -6px;
+        rotate: -8deg;
+        background: #ff2a2a;
+        box-shadow: 0 0 0 5px var(--nero);
+        transform-origin: 0% 50%;
+      }
+      #slab {
+        padding: 18px 46px 24px;
+        background: var(--giallo);
+        box-shadow: 0 14px 0 rgba(0, 0, 0, 0.35);
+      }
+      #dopo {
+        line-height: 1;
+        color: var(--nero);
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="blocco">
+          <div id="prima" class="contorno"><span id="prima-t"></span><i id="barra"></i></div>
+          <div id="tilt"><div id="slab"><div id="dopo"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      document.getElementById("prima-t").textContent = P.prima;
+      document.getElementById("prima").style.fontSize = P.size_prima + "px";
+      document.getElementById("dopo").textContent = P.dopo;
+      document.getElementById("dopo").style.fontSize = P.size_dopo + "px";
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#prima",
+        { opacity: 0, filter: "blur(8px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0);
+      tl.fromTo("#barra", { scaleX: 0 }, { scaleX: 1, duration: 0.22, ease: "expo.out" }, 0.55);
+      // Grigio pieno, non trasparenza: col testo semitrasparente il contorno nero
+      // si vede attraverso le lettere.
+      tl.fromTo("#prima-t", { color: "#ffffff" }, { color: "#a8a8a8", duration: 0.2, ease: "power2.out" }, 0.7);
+      tl.fromTo("#tilt", { rotation: -3 }, { rotation: -3, duration: 0.01 }, 0);
+      tl.fromTo("#slab", { scaleX: 0 }, { scaleX: 1, duration: 0.24, ease: "expo.out" }, 0.95);
+      tl.fromTo("#dopo",
+        { opacity: 0, scale: 1.5, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 1.03);
+      tl.fromTo("#tilt", { y: 0 }, { y: 8, duration: 0.05, ease: "power2.out" }, 1.22);
+      tl.to("#tilt", { y: 0, duration: 0.14, ease: "power2.inOut" }, 1.27);
+      tl.to("#blocco", { opacity: 0, scale: 0.92, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

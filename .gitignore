@@ -1,0 +1,93 @@
+# Ambiente Python isolato (ricreabile con setup.ps1)
+.venv/
+
+# I profili Chrome degli agenti di pubblicazione: 2,5 GB, e dentro ci sono le
+# **sessioni gia autenticate** di YouTube, TikTok e Whop. Non sono dati pesanti
+# per sbaglio: sono credenziali. Non devono finire ne' in git ne' in un pacchetto
+# (export_skill.py salta ogni cartella che comincia col punto).
+#
+# La regola e' **per forma, non per elenco**: ogni cartella che comincia col
+# punto, come fa gia' export_skill.py. L'elenco nominale reggeva finche' i
+# profili erano quattro; con un gruppo per nicchia ne nascono tre alla volta
+# (.youtube-business, .tiktok-business, .instagram-business, .whop-business) e
+# un elenco che va aggiornato a mano e' un elenco che un giorno non lo e'.
+# Elencare le credenziali una per una e' lo stesso difetto pagato in
+# export_skill.py: il doppione fuori posto passa.
+publish/.*/
+radar/.*/
+
+# Strumenti esterni compilati dal setup (fornitore di PO Token per YouTube)
+.tools/
+
+# Intermedi della pipeline: video scaricati, audio, trascrizioni, tracking.
+# Pesano molto e sono tutti rigenerabili dal sorgente.
+/work
+
+# Clip finali
+/output
+
+# Modelli scaricati dal setup (YuNet, Whisper) - centinaia di MB
+.claude/skills/viral-clips/assets/models/
+.claude/skills/viral-clips/assets/fonts/*.ttf
+.claude/skills/viral-clips/assets/fonts/*.otf
+
+__pycache__/
+*.pyc
+
+# Storico delle metriche della dashboard: dati misurati, non rigenerabili —
+# stessa famiglia di decisions.json/corrections.json in work/. Non va su git,
+# va portato con export_skill.py se un domani lo si aggiorna li' dentro.
+dashboard/storico.sqlite
+
+# Le prove di cosa vedeva il browser quando un passo di pubblicazione e'
+# fallito: HTML e screenshot della pagina, uno per tentativo. Servono per
+# capire *quel* tentativo, e sono gia' 277 MB in tre giorni — l'esatto
+# contrario di quello che git deve tenere.
+publish/logs/
+radar/logs/
+*.log
+
+# Le pagine salvate quando un selettore delle analytics non aggancia: stessa
+# famiglia dei log sopra — servono a capire *quel* tentativo, e un HTML di
+# TikTok pesa 178 KB a botta.
+dashboard/dump-pubblico/
+# Gli screenshot del collaudo del pannello: si rifanno a ogni lancio.
+dashboard/dump-collaudo/
+
+# Scaricato dal radar e rigenerabile: i brief dei committenti (13 minuti di
+# rete) e le due letture del sito. Il giudizio su queste campagne — nicchia,
+# forma, lingua — sta invece in `radar/assegnazioni.json`, che e' versionato
+# apposta: e' l'unica cosa qui dentro che nessuno script sa rifare.
+radar/briefs/
+radar/err.txt
+# Le letture del sito e cio' che se ne ricava a ogni giro: si riscrivono tutte
+# al prossimo «Aggiorna», e versionarle vorrebbe dire un diff da un megabyte a
+# giro. Restano versionati i file che portano un giudizio scritto a mano o da
+# Claude: assegnazioni, verifiche, tassonomia, provider (attrito_invio).
+radar/catalogo.json
+radar/radar_dettagli.json
+radar/radar_state.json
+radar/ultimo_giro.json
+radar/ultima_classifica.json
+radar/nicchie_report.md
+radar/radar_report.md
+# I candidati del risolutore delle sorgenti: una cache che `sorgenti.py` rifa'
+# leggendo la rete, non una decisione.
+radar/sorgenti/
+# La conversazione della scheda «Chiedi»: stato di una sessione, non storia.
+dashboard/conversazione.json
+# Il grezzo dell'ultima lettura delle analitiche per post (dashboard/analitiche.py):
+# dati misurati e rigenerati a ogni giro, come storico.sqlite.
+dashboard/analitiche/
+publish/iscrizioni.json
+dashboard/ultimo_lavoro.json
+dashboard/ultimo_lavoro.tmp
+dashboard/iscrizioni.log
+
+# Dipendenze Node delle grafiche: le rifa npm ci dal lockfile.
+node_modules/
+
+# Credenziali: mai in git
+.env
+*.env
+.env.*

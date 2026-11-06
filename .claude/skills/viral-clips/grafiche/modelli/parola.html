@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- Una o due parole timbrate su una fascia gialla, inclinata di 3 gradi.
+     Dati: {testo, size}. Lo misura scripts/grafiche.py, qui si disegna. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      #slab {
+        padding: 22px 50px 28px;
+        background: var(--giallo);
+        box-shadow: 0 14px 0 rgba(0, 0, 0, 0.35);
+      }
+      #txt {
+        line-height: 1;
+        color: var(--nero);
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="tilt" class="centro">
+          <div id="slab"><div id="txt"></div></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      const txt = document.getElementById("txt");
+      txt.textContent = P.testo;
+      txt.style.fontSize = P.size + "px";
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#tilt", { rotation: -3 }, { rotation: -3, duration: 0.01 }, 0);
+      tl.fromTo("#slab", { scaleX: 0 }, { scaleX: 1, duration: 0.24, ease: "expo.out" }, 0);
+      tl.fromTo("#txt",
+        { opacity: 0, scale: 1.5, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.08);
+      // L'urto: la fascia cede di qualche pixel quando la parola atterra.
+      tl.fromTo("#tilt", { y: 0 }, { y: 8, duration: 0.05, ease: "power2.out" }, 0.27);
+      tl.to("#tilt", { y: 0, duration: 0.14, ease: "power2.inOut" }, 0.32);
+      tl.to("#tilt", { opacity: 0, scale: 0.9, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

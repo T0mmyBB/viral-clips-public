@@ -1,0 +1,5 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    "ruff.importStrategy": "fromEnvironment",
+    "ruff.path": ["${workspaceFolder}/.venv/Scripts/ruff.exe"]
+}

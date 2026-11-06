@@ -1,0 +1,114 @@
+<!doctype html>
+<!-- Un conteggio di giorni: la cifra sale fino al valore detto e sotto una striscia
+     di tacche si riempie di giallo alla stessa velocita, l'ultima accesa e piu alta.
+     Dati: {testo, size, etichetta, size_etichetta, valore, tacche}. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      #blocco {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+      }
+      #cifra {
+        line-height: 1;
+        white-space: nowrap;
+        color: var(--giallo);
+        -webkit-text-stroke-width: 18px;
+      }
+      #etichetta {
+        white-space: nowrap;
+        line-height: 1;
+      }
+      #striscia {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 90px;
+        padding: 14px 18px;
+        background: rgba(0, 0, 0, 0.78);
+        border: 4px solid var(--bianco);
+        box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+      }
+      .tacca {
+        width: 12px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.28);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="blocco">
+          <div id="cifra" class="contorno"></div>
+          <div id="etichetta" class="contorno"></div>
+          <div id="striscia"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      const cifra = document.getElementById("cifra");
+      const etichetta = document.getElementById("etichetta");
+      const striscia = document.getElementById("striscia");
+      cifra.style.fontSize = P.size + "px";
+      cifra.textContent = "0";
+      if (P.etichetta) {
+        etichetta.textContent = P.etichetta;
+        etichetta.style.fontSize = P.size_etichetta + "px";
+      } else {
+        etichetta.remove();
+      }
+      const tacche = [];
+      for (let i = 0; i < P.tacche; i++) {
+        const t = document.createElement("div");
+        t.className = "tacca";
+        striscia.appendChild(t);
+        tacche.push(t);
+      }
+
+      const CONTA = 1.5;
+      const n = { v: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#blocco",
+        { opacity: 0, scale: 0.85, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.25, ease: "back.out(1.5)" }, 0);
+      // La cifra e le tacche partono dallo stesso orologio: un solo ease per tutte e due.
+      tl.fromTo(n, { v: 0 }, {
+        v: P.valore, duration: CONTA, ease: "power2.out",
+        onUpdate: () => {
+          cifra.textContent = String(Math.round(n.v));
+          const acceso = Math.floor((n.v / P.valore) * P.tacche);
+          tacche.forEach((t, i) => {
+            const on = i < acceso;
+            t.style.background = on ? "#ffe500" : "rgba(255,255,255,0.28)";
+            t.style.height = (on && i === acceso - 1 ? 62 : 36) + "px";
+          });
+        },
+      }, 0.1);
+      tl.call(() => {
+        cifra.textContent = String(P.valore);
+        tacche.forEach((t, i) => {
+          t.style.background = "#ffe500";
+          t.style.height = (i === tacche.length - 1 ? 62 : 36) + "px";
+        });
+      }, null, 0.1 + CONTA + 0.01);
+      tl.fromTo("#cifra", { scale: 1 }, { scale: 1.1, duration: 0.08, ease: "power2.out" }, 0.1 + CONTA);
+      tl.to("#cifra", { scale: 1, duration: 0.22, ease: "power2.inOut" }, 0.18 + CONTA);
+      if (P.etichetta) {
+        tl.fromTo("#etichetta",
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power4.out" }, 0.45);
+      }
+      tl.to("#blocco", { opacity: 0, scale: 0.92, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

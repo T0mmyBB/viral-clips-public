@@ -1,0 +1,45 @@
+# Ruff: lint, ordinamento degli import e formattazione.
+# La versione e' fissata in setup.ps1, e VS Code usa quella del .venv.
+
+target-version = "py312"
+# Il codice e' scritto a 100 colonne: a 88 il format ne manderebbe a capo 742.
+line-length = 100
+# Le cartelle da cui i moduli si importano per nome (via sys.path): senza, Ruff
+# li crede librerie esterne e li mescola con cv2 e numpy.
+src = [".claude/skills/viral-clips/scripts", "dashboard", "publish", "radar", "tests"]
+
+[lint]
+select = [
+    "E4",   # import: E402 e' quella che i `noqa` del progetto gia' dichiarano
+    "E7",   # istruzioni
+    "E9",   # errori di sintassi e di lettura
+    "F",    # pyflakes: nomi indefiniti, import inutilizzati
+    "I",    # ordinamento degli import
+    "UP",   # sintassi superata per Python 3.12
+    "B",    # bugbear: trappole comuni
+    "RUF",  # regole di Ruff, compresa RUF100 (noqa inutile)
+]
+ignore = [
+    "E741",  # `l` come nome: qui e' quasi sempre una riga, e si legge
+    "B905",  # `zip(strict=)`: aggiungerlo cambia comportamento, non e' stile
+]
+# RUF100 segnala ma non tocca: un `noqa` porta spesso il perche' accanto al codice,
+# e toglierlo perche' la regola non e' attiva cancella la spiegazione.
+unfixable = ["RUF100"]
+# Codici che compaiono nei `noqa` ma appartengono a regole non attive qui.
+external = ["BLE001", "N802"]
+
+[lint.isort]
+# `percorsi` mette le cartelle del progetto su sys.path: va importato prima di
+# qualunque modulo del progetto, e l'ordine alfabetico lo metterebbe dopo.
+section-order = [
+    "future",
+    "standard-library",
+    "percorsi",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[lint.isort.sections]
+percorsi = ["percorsi"]

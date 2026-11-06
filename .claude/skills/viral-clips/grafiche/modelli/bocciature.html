@@ -1,0 +1,128 @@
+<!doctype html>
+<!-- Una fila di tentativi respinti: un riquadro numerato per volta, e il timbro rosso
+     che ci cade sopra. In fondo, il risultato in giallo. Dati: {titolo, size_titolo,
+     testo, size_timbro, quante, colonne, finale, size_finale}. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --rosso: #ff3b30;
+      }
+      #blocco {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 26px;
+      }
+      #titolo,
+      #finale {
+        white-space: nowrap;
+        line-height: 1;
+      }
+      #finale {
+        color: var(--giallo);
+        -webkit-text-stroke-width: 16px;
+      }
+      #griglia {
+        display: grid;
+        gap: 24px;
+        justify-content: center;
+      }
+      .tent {
+        position: relative;
+        width: 290px;
+        height: 140px;
+        background: rgba(0, 0, 0, 0.82);
+        border: 4px solid var(--bianco);
+        box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .num {
+        margin: 10px 0 0 14px;
+        font-size: 40px;
+        line-height: 1;
+        color: var(--bianco);
+      }
+      .timbro {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        white-space: nowrap;
+        line-height: 1;
+        color: var(--rosso);
+        border: 6px solid var(--rosso);
+        padding: 6px 14px 4px;
+        background: rgba(0, 0, 0, 0.55);
+        transform: translate(-50%, -42%) rotate(-12deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="blocco">
+          <div id="titolo" class="contorno"></div>
+          <div id="griglia"></div>
+          <div id="finale" class="contorno"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      const titolo = document.getElementById("titolo");
+      const finale = document.getElementById("finale");
+      const griglia = document.getElementById("griglia");
+      titolo.textContent = P.titolo;
+      titolo.style.fontSize = P.size_titolo + "px";
+      griglia.style.gridTemplateColumns = "repeat(" + P.colonne + ", 290px)";
+      for (let i = 0; i < P.quante; i++) {
+        const t = document.createElement("div");
+        t.className = "tent";
+        t.innerHTML = '<div class="num"></div><div class="timbro"></div>';
+        t.querySelector(".num").textContent = "#" + (i + 1);
+        const s = t.querySelector(".timbro");
+        s.textContent = P.testo;
+        s.style.fontSize = P.size_timbro + "px";
+        griglia.appendChild(t);
+      }
+      if (P.finale) {
+        finale.textContent = P.finale;
+        finale.style.fontSize = P.size_finale + "px";
+      } else {
+        finale.remove();
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#titolo",
+        { opacity: 0, y: -20, filter: "blur(8px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25, ease: "power4.out" }, 0);
+      const PASSO = 0.28;
+      const T0 = 0.3;
+      griglia.querySelectorAll(".tent").forEach((t, i) => {
+        const t0 = T0 + PASSO * i;
+        tl.fromTo(t, { opacity: 0, y: 30, scale: 0.9 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.2, ease: "power3.out" }, t0);
+        // Il timbro cade da grande e si pianta: l'ultimo colpo e a meta del passo.
+        tl.fromTo(t.querySelector(".timbro"),
+          { opacity: 0, scale: 2.4 },
+          { opacity: 1, scale: 1, duration: 0.14, ease: "power4.in" }, t0 + 0.1);
+        tl.fromTo(t, { x: 0 }, { x: 5, duration: 0.04, yoyo: true, repeat: 3, ease: "none" }, t0 + 0.24);
+      });
+      const FINE = T0 + PASSO * P.quante + 0.2;
+      if (P.finale) {
+        tl.fromTo("#finale",
+          { opacity: 0, scale: 0.5, filter: "blur(10px)" },
+          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "back.out(1.8)" }, FINE);
+      }
+      tl.to("#blocco", { opacity: 0, scale: 0.94, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

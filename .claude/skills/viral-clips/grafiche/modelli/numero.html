@@ -1,0 +1,82 @@
+<!doctype html>
+<!-- Una cifra che sale fino al valore detto, gialla, con l'etichetta sotto.
+     Dati: {testo, conta, size, etichetta, size_etichetta, prefisso, suffisso,
+     valore, decimali, separatore}. Senza `conta` la cifra entra gia intera. -->
+<html data-composition-variables='[{"id":"dati","type":"string","label":"Dati","default":"{}"}]'>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/base.css" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      #blocco {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #cifra {
+        line-height: 1;
+        white-space: nowrap;
+        color: var(--giallo);
+        -webkit-text-stroke-width: 18px;
+      }
+      #etichetta {
+        margin-top: 14px;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="g" data-start="0" data-duration="__DURATA__"
+         data-width="1080" data-height="760" data-fps="__FPS__">
+      <div id="card" class="clip centro" data-start="0" data-duration="__DURATA__">
+        <div id="blocco">
+          <div id="cifra" class="contorno"></div>
+          <div id="etichetta" class="contorno"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const P = JSON.parse(window.__hyperframes.getVariables().dati);
+      const D = __DURATA__;
+      const cifra = document.getElementById("cifra");
+      const etichetta = document.getElementById("etichetta");
+      cifra.style.fontSize = P.size + "px";
+      cifra.textContent = P.testo;
+      if (P.etichetta) {
+        etichetta.textContent = P.etichetta;
+        etichetta.style.fontSize = P.size_etichetta + "px";
+      } else {
+        etichetta.remove();
+      }
+
+      function scrivi(x) {
+        let s = P.decimali ? x.toFixed(P.decimali) : String(Math.round(x));
+        if (P.separatore) s = s.replace(".", P.separatore);
+        cifra.textContent = P.prefisso + s + P.suffisso;
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cifra",
+        { opacity: 0, scale: 0.6, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.28, ease: "back.out(1.6)" }, 0);
+      if (P.conta) {
+        const n = { v: 0 };
+        tl.fromTo(n, { v: 0 }, {
+          v: P.valore, duration: 0.9, ease: "expo.out",
+          onUpdate: () => scrivi(n.v),
+        }, 0);
+        tl.call(() => scrivi(P.valore), null, 0.95);
+      }
+      // A cifra arrivata, un colpo di scala: e il momento in cui si sente.
+      tl.fromTo("#cifra", { scale: 1 }, { scale: 1.08, duration: 0.08, ease: "power2.out" }, 0.92);
+      tl.to("#cifra", { scale: 1, duration: 0.2, ease: "power2.inOut" }, 1.0);
+      if (P.etichetta) {
+        tl.fromTo("#etichetta",
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power4.out" }, 0.45);
+      }
+      tl.to("#blocco", { opacity: 0, scale: 0.92, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, D - 0.2);
+      window.__timelines["g"] = tl;
+    </script>
+  </body>
+</html>

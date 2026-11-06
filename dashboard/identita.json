@@ -1,0 +1,66 @@
+{
+ "_leggimi": "Il registro degli account che pubblicano: e' un ESEMPIO da compilare. Non lo scrive nessuno script: si aggiorna a mano quando cambia qualcosa (un account nuovo, una nicchia diversa). E' la fonte per il ritmo per identita' e per raggruppare le metriche.",
+ "_gruppi": "Un `gruppo` e' un account Google con i suoi profili sulle piattaforme: e' l'unita' che ha una nicchia, non la singola identita'. Una clip lavorata per un gruppo esce su tutte le sue `piattaforme_attese`. I gruppi possono esistere nel file prima degli account veri: finche' `identita` e' vuoto il gruppo si vede nel pannello come 'da aprire'.",
+ "_lingue_in_plancia": "Le lingue del parlato che il pannello conta. Il resto resta su disco e fuori da ogni somma. La lingua si legge da work/<cartella>/transcript.json, dove transcribe.py ha scritto quella davvero usata.",
+ "_handle_da_rilevare": "handle: null vuol dire 'non ancora letto dal browser'. Si riempie dopo il primo accesso, leggendolo dalla pagina invece di digitarlo: un handle sbagliato blocca ogni pubblicazione del gruppo, ed e' voluto. Prima di caricare, publish/registro.py confronta l'account collegato con quello atteso.",
+ "_whop": "Ogni gruppo ha il suo account Whop, perche' Whop collega una sola identita' per piattaforma. `whop_handle` e' il conto su cui si incassa.",
+ "lingue_in_plancia": [
+  "en"
+ ],
+ "gruppi": [
+  {
+   "id": "esempio",
+   "nicchia": "business",
+   "descrizione": "Un gruppo d'esempio: un account per nicchia, sulle tre piattaforme.",
+   "piattaforme_attese": [
+    "youtube",
+    "tiktok",
+    "instagram"
+   ],
+   "google": null,
+   "aperto_il": null,
+   "identita": [
+    "esempio-youtube",
+    "esempio-tiktok",
+    "esempio-instagram"
+   ],
+   "note": "Da compilare: data di apertura, handle letti dal browser, account Whop.",
+   "whop_handle": null
+  }
+ ],
+ "identita": [
+  {
+   "id": "esempio-youtube",
+   "gruppo": "esempio",
+   "piattaforma": "youtube",
+   "handle": null,
+   "profilo_browser": "publish/.youtube-esempio",
+   "nicchia": "business",
+   "account_started": null,
+   "max_per_day": 2,
+   "min_gap_seconds": 5400
+  },
+  {
+   "id": "esempio-tiktok",
+   "gruppo": "esempio",
+   "piattaforma": "tiktok",
+   "handle": null,
+   "profilo_browser": "publish/.tiktok-esempio",
+   "nicchia": "business",
+   "account_started": null,
+   "max_per_day": 2,
+   "min_gap_seconds": 5400
+  },
+  {
+   "id": "esempio-instagram",
+   "gruppo": "esempio",
+   "piattaforma": "instagram",
+   "handle": null,
+   "profilo_browser": "publish/.instagram-esempio",
+   "nicchia": "business",
+   "account_started": null,
+   "max_per_day": 2,
+   "min_gap_seconds": 5400
+  }
+ ]
+}
